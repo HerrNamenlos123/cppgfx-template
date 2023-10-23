@@ -37,3 +37,6 @@ cmake-build-*/
 
 # CLion stuff
 .idea/
+
+# ImGui file
+imgui.ini
