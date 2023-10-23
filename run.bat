@@ -1,5 +1,7 @@
 @echo off
 
+cls
+
 :: Batch
 
 :: If the file does not exist
@@ -29,7 +31,7 @@ echo [34m[cppgfx] Building the project...[0m
 cmake --build build
 
 if %errorlevel% neq 0 (
-    echo [31m[cppgfx] Building failed[0m
+    echo [91m[cppgfx] Building failed[0m
     exit /b 1
 )
 
