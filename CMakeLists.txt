@@ -8,6 +8,8 @@ cmake_minimum_required(VERSION 3.16)
 
 project(MyProject VERSION 1.0.0 LANGUAGES C CXX)
 
+add_compile_options($<$<CXX_COMPILER_ID:MSVC>:/MP>)     # Enable parallel build in MSVC
+
 
 
 # ========================
@@ -29,6 +31,7 @@ set_target_properties(${PROJECT_NAME} PROPERTIES                # Set the output
     RUNTIME_OUTPUT_DIRECTORY_MINSIZEREL ${CMAKE_BINARY_DIR}
     RUNTIME_OUTPUT_DIRECTORY_RELWITHDEBINFO ${CMAKE_BINARY_DIR}
 )
+
 
 
 # =======================

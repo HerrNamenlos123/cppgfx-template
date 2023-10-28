@@ -4,6 +4,14 @@ cls
 
 :: Batch
 
+:: Check if CMake is installed
+cmake --version > NUL
+if %errorlevel% neq 0 (
+    echo.
+    echo CMake not found. Please install CMake by visiting https://cmake.org/download/.
+    exit /b 1
+)
+
 :: If the file does not exist
 if not exist "build/cppgfx.configured" (
     echo [34m[cppgfx] The project was not configured yet, configuring now...[0m
