@@ -27,7 +27,7 @@ public:
         size(1024, 768);
         setTitle("My C++ Application");
 
-        balls.push_back(Ball({ { 10, 10 }, { 10, 10 }, 10, sf::Color::Green }));
+        balls.push_back(Ball({ { 10, 10 }, { 500, 500 }, 10, sf::Color::Green }));
     }
 
     // This function is called repeatedly until the program is terminated
@@ -35,32 +35,47 @@ public:
         // Calling the C loop function
         c_loop();
 
+
         // Spawn new balls
         if (mousePressed) {
-            // Random starting velocity
-            glm::vec2 vel = { random(-10, 10), random(-10, 10) };
+            for (int i = 0; i < 1; i++) {  // How many balls to spawn every frame
+                // Random starting velocity
+                glm::vec2 vel = {random(-400, 400), random(-200, 400)};
 
-            // Random color
-            sf::Color color = sf::Color(randomInt(0, 255), randomInt(0, 255), randomInt(0, 255));
+                // Random color
+                sf::Color color = sf::Color(randomInt(0, 255), randomInt(0, 255), randomInt(0, 255));
 
-            balls.push_back(Ball({ { mouseX, mouseY }, vel, 10, color }));
+                balls.push_back(Ball({{mouseX, mouseY}, vel, 10, color}));
+            }
         }
 
         // Update the position of the circle
         for (auto& ball : balls) {
-            ball.vel.y += 0.5;    // Gravity
-            ball.pos += ball.vel;
+            ball.vel.y += 1000 * frameTime;    // Gravity
+            auto distance = ball.vel * frameTime;
+            ball.pos += distance;
 
-            if (ball.pos.x < ball.radius || ball.pos.x > width - ball.radius) {
-                ball.pos.x -= ball.vel.x;
-                ball.vel.x *= -0.9;
+            if (ball.pos.x <= ball.radius || ball.pos.x >= width - ball.radius) {
+                ball.pos.x = clamp(ball.pos.x, ball.radius, width - ball.radius);
+                ball.vel *= 0.9;
+                ball.vel.x *= -1;
             }
-            if (ball.pos.y < ball.radius || ball.pos.y > height - ball.radius) {
-                ball.pos.y -= ball.vel.y;
-                ball.vel.y *= -0.9;
+            if (ball.pos.y <= ball.radius || ball.pos.y >= height - ball.radius) {
+                ball.pos.y = clamp(ball.pos.y, ball.radius, height - ball.radius);
+                ball.vel *= 0.9;
+                ball.vel.y *= -1;
             }
             fill(ball.color);
             circle(ball.pos.x, ball.pos.y, ball.radius);
+        }
+
+        // Remove the first ball that lies on the ground
+        for (size_t i = 0; i < balls.size(); i++) {
+            auto distance = balls[i].vel * frameTime;
+            if (glm::length(distance) <= 1) {  // If the ball is almost standing still
+                balls.erase(balls.begin() + i);
+                break;
+            }
         }
 
         // Status prints
