@@ -35,7 +35,6 @@ public:
         // Calling the C loop function
         c_loop();
 
-
         // Spawn new balls
         if (mousePressed) {
             for (int i = 0; i < 1; i++) {  // How many balls to spawn every frame
@@ -72,7 +71,8 @@ public:
         // Remove the first ball that lies on the ground
         for (size_t i = 0; i < balls.size(); i++) {
             auto distance = balls[i].vel * frameTime;
-            if (glm::length(distance) <= 1) {  // If the ball is almost standing still
+            // If the ball is almost standing still
+            if (glm::length(distance) <= 1 && balls[i].pos.y > height - balls[i].radius - 5) {
                 balls.erase(balls.begin() + i);
                 break;
             }
